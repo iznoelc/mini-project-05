@@ -70,10 +70,13 @@ function sortDate(Ascending, DataArray){
 function sortTitle(Ascending, DataArray){
     let returnArray = [...DataArray];
 
-    returnArray.sort();
-    if(Ascending){
+    returnArray.sort((a,b) => {
+        return a.attr.localeCompare(b.attr)
+    });
+    if(!Ascending){
         returnArray.reverse();
     }
+    
 
     return returnArray;
 

@@ -43,7 +43,12 @@ function DataDisplayer({isLoading, data, addToFav, removeFromFav}){
             </fieldset>
         </div>
 
-        {isLoading && <h1 className="text-7xl">Loading data ... please wait</h1>}
+        {isLoading && 
+            <div className="flex flex-col items-center justify-center gap-5">
+                <h1 className="primary-font text-5xl">Loading data ... please wait</h1>
+                <span class="loading loading-spinner loading-xl"></span>
+            </div>
+            }
         {!isLoading && sortedData && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto p-8"> 
 

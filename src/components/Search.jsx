@@ -12,17 +12,17 @@ function Search({onSearch, data}){
         //specific to each type of search we want to enable
         //Note: we change things to lowercase to avoid simple grammer mistakes resulting in no results
         const results = data.filter(item => {
-        const value = search4.toLowerCase();
+        const value = search4.toString().toLowerCase();
 
         switch (searchType) {
         case "genre":
             return item.genre.toLowerCase().includes(value);
 
         case "age_group":
-            return String(item.age_group).includes(value);
+            return item.age_group.toLowerCase().includes(value);
 
         case "releasing_year":
-            return item.releasing_year.includes(value);
+            return item.releasing_year.toString().toLowerCase().includes(value);
 
         default:
             return true;

@@ -3,6 +3,7 @@ import DataSorter from "./DataSorter";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
 
+
 function DataDisplayer({isLoading, data, addToFav, removeFromFav}){
     const [sortType, setSortType] = useState("Rating"); // default sort type
     const [ascending, setAscending] = useState(true); // default sort direction 

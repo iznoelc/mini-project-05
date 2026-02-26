@@ -1,3 +1,5 @@
+import { Download } from "./FavDownload";
+
 function NavBar({favorites}){
     return(
         <>
@@ -49,7 +51,7 @@ function NavBar({favorites}){
                     </ul>
                 </div>
                 <div className="navbar-end">
-                    <a className="btn secondary-font">Download Favorites</a>
+                    <button className="btn secondary-font" onClick={() => Download(favorites)}>Download Favorites</button>
                 </div>
             </div>
         </>

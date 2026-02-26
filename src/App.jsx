@@ -4,7 +4,6 @@ import DataDisplayer from './components/DataDisplayer';
 import Footer from './components/Footer'
 import './App.css'
 import Search from "./components/Search";
-import Download from "./components/FavDownload";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -70,7 +69,6 @@ function App() {
     return(
         <>
             <NavBar favorites={favMovies} />
-            <Download myFavorites={favMovies}></Download>
             <Search data={data} onSearch={setFilteredData}></Search>
             <DataDisplayer isLoading={isLoading} data={filteredData ?? data} addToFav={addToFav} removeFromFav={removeFromFav}/>
             <Footer />

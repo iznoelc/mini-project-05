@@ -33,40 +33,6 @@ function sortDate(Ascending, DataArray){
     });
 
 
-    /*if (Ascending){    // Old Version
-
-        for (let i = 1; i < returnArray.length; i++) {
-        let currentYear = 0;
-        currentYear = returnArray[i].releasing_year;
-
-        let j = i-1;
-
-            while(j >= 0 && returnArray[j].releasing_year >= currentYear){
-                returnArray[j + 1] = returnArray[j];
-                j--;
-            }
-            returnArray[j + 1].releasing_year = currentYear;
-
-        }
-    }
-    else{
-
-        for (let i = 1; i < returnArray.length; i++) {
-        let currentYear = 0;
-        currentYear = returnArray[i].releasing_year;
-
-        let j = i-1;
-
-            while(j >= 0 && returnArray[j].releasing_year <= currentYear){
-                returnArray[j + 1] = returnArray[j];
-                j--;
-            }
-            returnArray[j + 1].releasing_year = currentYear;
-
-        }
-    }*/
-
-
     return returnArray;
 }
 

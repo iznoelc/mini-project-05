@@ -1,4 +1,5 @@
 import { Download } from "./FavDownload";
+import Gleebus from "../assets/GleebusLogo.png";
 
 function NavBar({favorites}){
     return(
@@ -22,7 +23,10 @@ function NavBar({favorites}){
                         </li>
                     </ul>
                     </div>
-                    <a className="primary-font px-4 text-2xl fond-extrabold">MOVIE MANAGER</a>
+                    <div className="h-25 w-25">
+                        <img src={Gleebus} alt="GleebusLogo" className="h-full w-full object-contain"></img>
+                    </div>
+                    <a className="primary-font px-4 text-2xl fond-extrabold">GLEEBUS' MOVIE MANAGER</a>
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">

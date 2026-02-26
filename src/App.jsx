@@ -36,26 +36,23 @@ function App() {
     fetchData();
   }, []);
 
+    /* add a movie to the favorites list, but dont add it if its already in the list. if its already in the list, give an alert */
     const addToFav = (movie) => {
       setFavMovies(currentItems => {
-          // check if the vinyl is already in the cart
           const existingItem = currentItems.find(item => item.title === movie.title);
           
           if (!existingItem) {
-            // if it is, use map to create a new array of all the items in the cart, but update the quantity of the existing item
             return [...currentItems, movie]
           } else {
-            // if it isn't, add it to the cart with a quantity of 1
+            alert("Movie is already in favorites!");
             return currentItems;
           }
       });
     };
 
-    /* removes a vinyl from the cart using setCartItems. it takes the initial state of the cart and filters out the desired item. 
-     * as a safe guard, it makes sure the item exists in the list first, and if it doesn't, it just returns the current cart items. */
+    /* remove a movie from the favorites list. It takes in a movie object as an argument and updates the favMovies state by filtering out the movie with the matching title. */
     const removeFromFav = (movie) => {
       setFavMovies(currentItems => {
-          // check if the vinyl is already in the cart
           const existingItem = currentItems.find(item => item.title === movie.title);
 
           if (existingItem) {

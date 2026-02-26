@@ -46,13 +46,15 @@ function DataDisplayer({isLoading, data, addToFav, removeFromFav}){
             </fieldset>
         </div>
 
+        {/* To be displayed if data is still loading */}
         {isLoading && 
             <div className="flex flex-col items-center justify-center gap-5">
                 <h1 className="primary-font text-5xl">Loading data ... please wait</h1>
                 <span class="loading loading-spinner loading-xl"></span>
             </div>
-            }
-        {!isLoading && sortedData && (
+        }
+        {/* To be displayed if data is not loading and the current data length is bigger than zero */}
+        {!isLoading && sortedData.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto p-8"> 
 
             {sortedData.map((d, index) => (
@@ -74,6 +76,12 @@ function DataDisplayer({isLoading, data, addToFav, removeFromFav}){
                     </div>
                 </div>
             ))}
+            </div>
+        )}
+        {/* To be displayed if data is not loading and the current data length is zero (i.e. no search results) */}
+        {!isLoading && sortedData.length === 0 && (
+            <div className="flex flex-col items-center justify-center gap-5 p-16">
+                <h1 className="secondary-font text-2xl">No movies found.</h1>
             </div>
         )}
         </>

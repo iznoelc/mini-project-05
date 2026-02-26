@@ -1,7 +1,8 @@
 # Mini Project 04
 Izzy Carlson, Landon Chapin, Esperanza Paulino
 
-## LIVE LINK: gleebusmoviemanager.netlify.app
+## LIVE LINK:
+https://gleebusmoviemanager.netlify.app/
 
 ## Features of This Project
 - Utility-first css styling (using tailwind css and daisy UI components)

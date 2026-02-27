@@ -1,22 +1,5 @@
-# Mini Project 04
+# Mini Project 05
 Izzy Carlson, Landon Chapin, Esperanza Paulino
 
 ## LIVE LINK:
-https://gleebusmoviemanager.netlify.app/
-
-## Features of This Project
-- Utility-first css styling (using tailwind css and daisy UI components)
-- A nav bar with an icon, site title, button to see liked movies, button to download liked movies, and some appearance-only buttons
-- A footer
-- Load movie data from an external file and display it as cards in a modular way
-- A loader when movie data is still loading to inform user that the data has not yet been loaded 
-- Searching
-    - A search bar to type in key words
-    - A drop down to determine what the user wants to search by (age group, genre, and year)
-    - A message to say "No movies found." if there are no movies from the user's entered keyword(s)
-- Sorting
-    - View the movies but sorted (year, title, and IMBb rating -- default set to year)
-- Use React-Icons for the like and dislike button icons
-    - Pressing like adds a specified movie to the user's liked movie list
-    - Pressing dislike removes a specified movie from the user's liked movie list
 

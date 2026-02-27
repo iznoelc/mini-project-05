@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
-import DataDisplayer from './components/DataDisplayer';
+import Dashboard from './components/Dashboard';
 import Footer from './components/Footer'
 import './App.css'
 import Search from "./components/Search";
@@ -9,7 +9,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [filteredData,setFilteredData] = useState(null);
+  // const [filteredData,setFilteredData] = useState(null);
   const [favMovies, setFavMovies] = useState([]);
 
   async function fetchData() {
@@ -66,8 +66,7 @@ function App() {
     return(
         <>
             <NavBar favorites={favMovies} />
-            <Search data={data} onSearch={setFilteredData}></Search>
-            <DataDisplayer isLoading={isLoading} data={filteredData ?? data} addToFav={addToFav} removeFromFav={removeFromFav}/>
+            <DataDisplayer isLoading={isLoading} data={data} addToFav={addToFav} removeFromFav={removeFromFav}/>
             <Footer />
             
         </>

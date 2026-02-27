@@ -1,26 +1,42 @@
 import { useState, useMemo } from "react";
 import DataSorter from "./DataSorter";
+import Search from "./Search";
+//import handleChangeInSearch from "./Search";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
 
 
-function DataDisplayer({isLoading, data, addToFav, removeFromFav}){
+function Dashboard({isLoading, data, addToFav, removeFromFav}){
+
     const [sortType, setSortType] = useState("Date"); // default sort type
     const [ascending, setAscending] = useState(true); // default sort direction 
+
+    const [searchQuery, setSearchQuery] = useState(""); // default search query - empty string
+    const [searchType, setSearchType] = useState("genre"); //default search typw
+
+    /* use useMemo to cache the result of Search that its only updated when its dependencies change. 
+       if searchQuery, searchType, or data are updated, the result of Search will also update to display the 
+       new filteredData.
+     */ 
+    const filteredData = useMemo(() => {
+        return Search(data, searchQuery, searchType);
+    }, [searchQuery, searchType, data]);
+      
 
     /* use useMemo to cache the result of DataSorter (jnside sortedData) that its only updated when its dependencies change. 
        if data, sortType, or ascending are updated, the result of DataSorter will also update to display the 
        new sortedData.
      */ 
     const sortedData = useMemo(() => {
-        if (!data){
+        // if there is no filtered data, just use the normal data list
+        if (!filteredData){
             console.log("Data is null");
-            return [];
+            return DataSorter(sortType, ascending, data);
         }
-        return DataSorter(sortType, ascending, data);
-    }, [data, sortType, ascending]);
+        // otherwise, sort the filtered data
+        return DataSorter(sortType, ascending, filteredData);
+    }, [filteredData, sortType, ascending, data]);
 
-    // console.log("Incoming data:", data);
     console.log("Sorted data:", sortedData);
 
     return (
@@ -44,6 +60,29 @@ function DataDisplayer({isLoading, data, addToFav, removeFromFav}){
                     Ascending Order
                 </label>
             </fieldset>
+            {/* search bar */}
+            <div className="flex items-center justify-center gap-5 pt-16">
+            <select onChange={(e) => setSearchType(e.target.value)} className="secondary-font">
+                <option value="genre">Genre</option>
+                <option value="age_group">Age Rating</option>
+                <option value="releasing_year">Release Year</option>
+            </select>
+            <label class="input input-bordered input-m w-lg">
+                <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" >
+                    <g
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    strokeWidth="2.5"
+                    fill="none"
+                    stroke="currentColor"
+                    >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.3-4.3"></path>
+                    </g>
+                </svg>
+                <input type="search" required placeholder="Search for movies..." onChange={(e) => setSearchQuery(e.target.value)}/>
+            </label>
+            </div>
         </div>
 
         {/* To be displayed if data is still loading */}
@@ -88,4 +127,4 @@ function DataDisplayer({isLoading, data, addToFav, removeFromFav}){
     );
 }
 
-export default DataDisplayer;
+export default Dashboard;

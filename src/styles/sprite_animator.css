@@ -1,0 +1,79 @@
+/* sprite_animator.css
+ * custom css class to animate the gleebus sprite sheet */
+
+.sprite {
+    background: url('../assets/GleebusSpriteSheet.png');
+    display: inline-block;
+    height: 1379px;
+    width: 1398px;
+    animation: gleebusAnimation 1.5s steps(1) infinite;
+}
+
+.sprite-1 {
+     background: url('../assets/GleebusSpriteSheet.png');
+     display: inline-block;
+     height: 1379px;
+     width: 1398px;
+     background-position: -0px -0px;
+ }
+ .sprite-2 {
+     background: url('../assets/GleebusSpriteSheet.png');
+     display: inline-block;
+     height: 1379px;
+     width: 1398px;
+     background-position: -1398px -0px;
+ }
+ .sprite-3 {
+     background: url('../assets/GleebusSpriteSheet.png');
+     display: inline-block;
+     height: 1379px;
+     width: 1398px;
+     background-position: -2796px -0px;
+ }
+ .sprite-4 {
+     background: url('../assets/GleebusSpriteSheet.png');
+     display: inline-block;
+     height: 1379px;
+     width: 1398px;
+     background-position: -0px -1379px;
+ }
+ .sprite-5 {
+     background: url('../assets/GleebusSpriteSheet.png');
+     display: inline-block;
+     height: 1379px;
+     width: 1398px;
+     background-position: -1398px -1379px;
+ }
+ .sprite-6 {
+     background: url('../assets/GleebusSpriteSheet.png');
+     display: inline-block;
+     height: 1379px;
+     width: 1398px;
+     background-position: -2796px -1379px;
+ }
+ .sprite-7 {
+     background: url('../assets/GleebusSpriteSheet.png');
+     display: inline-block;
+     height: 1379px;
+     width: 1398px;
+     background-position: -0px -2758px;
+ }
+ .sprite-8 {
+     background: url('../assets/GleebusSpriteSheet.png');
+     display: inline-block;
+     height: 1379px;
+     width: 1398px;
+     background-position: -1398px -2758px;
+ }
+ 
+ @keyframes gleebusAnimation {
+    0%   { background-position: -0px -0px; }
+    12.5% { background-position: -1398px -0px; }
+    25%  { background-position: -2796px -0px; }
+    37.5% { background-position: -0px -1379px; }
+    50%  { background-position: -1398px -1379px; }
+    62.5% { background-position: -2796px -1379px; }
+    75%  { background-position: -0px -2758px; }
+    87.5% { background-position: -1398px -2758px; }
+    100% { background-position: -0px -0px; } /* loops back to first frame */
+}

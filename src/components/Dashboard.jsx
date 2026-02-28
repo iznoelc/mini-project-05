@@ -1,24 +1,37 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import DataSorter from "./DataSorter";
 import Search from "./Search";
 //import handleChangeInSearch from "./Search";
 import { AiFillLike } from "react-icons/ai";
 import { AiFillDislike } from "react-icons/ai";
+import { useLoaderData } from "react-router-dom";
+import { useFavoriteMovies } from "../hooks/FavoriteMovieProvider";
 
+export default function Dashboard(){
+    const { addToFav, removeFromFav } = useFavoriteMovies();
+    // get the data from the dashboard loader in MainRouter using useLoaderData
+     const dataFromLoader = useLoaderData();
 
-function Dashboard({isLoading, data, addToFav, removeFromFav}){
-
+    const [data, setData] = useState(null); // the movie data
     const [sortType, setSortType] = useState("Date"); // default sort type
     const [ascending, setAscending] = useState(true); // default sort direction 
 
     const [searchQuery, setSearchQuery] = useState(""); // default search query - empty string
-    const [searchType, setSearchType] = useState("genre"); //default search typw
+    const [searchType, setSearchType] = useState("genre"); //default search type
+
+    /* use useEffect here to get the data once its loaded from the loader, since it will take some time. */
+    useEffect(() => {
+        if (dataFromLoader) {
+            setData(dataFromLoader);
+        }
+    }, [dataFromLoader]);
 
     /* use useMemo to cache the result of Search that its only updated when its dependencies change. 
        if searchQuery, searchType, or data are updated, the result of Search will also update to display the 
        new filteredData.
      */ 
     const filteredData = useMemo(() => {
+        if (!data) return []; // if there is no data, return null for filteredData
         return Search(data, searchQuery, searchType);
     }, [searchQuery, searchType, data]);
       
@@ -39,35 +52,20 @@ function Dashboard({isLoading, data, addToFav, removeFromFav}){
 
     console.log("Sorted data:", sortedData);
 
+    // temp
+    
+
     return (
         <>
         
         <div className="flex items-center justify-center gap-5">
-            {/* drop down menu for search type */}
-            <div className="dropdown dropdown-hover">
-                <div tabindex="0" role="button" className="btn m-1 secondary-font">SORT...</div>
-                    <ul tabindex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-lg">
-                        <li><a onClick={() => setSortType("Title")}>By Title</a></li>
-                        <li><a onClick={() => setSortType("Date")}>By Date</a></li>
-                        <li><a onClick={() => setSortType("Rating")}>By IMDb Rating</a></li>
-                    </ul>
-            </div>
-            {/* ascending/descending checkbox */}
-            <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-32 border p-4">
-                <legend className="fieldset-legend secondary-font">Sorting Options</legend>
-                <label className="label secondary-font">
-                    <input type="checkbox" defaultChecked className="checkbox" onChange={() => setAscending(!ascending)}/>
-                    Ascending Order
-                </label>
-            </fieldset>
             {/* search bar */}
-            <div className="flex items-center justify-center gap-5 pt-16">
             <select onChange={(e) => setSearchType(e.target.value)} className="secondary-font">
                 <option value="genre">Genre</option>
                 <option value="age_group">Age Rating</option>
                 <option value="releasing_year">Release Year</option>
             </select>
-            <label class="input input-bordered input-m w-lg">
+            <label className="input input-bordered input-m w-lg">
                 <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" >
                     <g
                     strokeLinejoin="round"
@@ -82,18 +80,27 @@ function Dashboard({isLoading, data, addToFav, removeFromFav}){
                 </svg>
                 <input type="search" required placeholder="Search for movies..." onChange={(e) => setSearchQuery(e.target.value)}/>
             </label>
+            {/* drop down menu for search type */}
+            <div className="dropdown dropdown-hover">
+                <div tabIndex="0" role="button" className="btn m-1 secondary-font">SORT...</div>
+                    <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-lg">
+                        <li><a onClick={() => setSortType("Title")}>By Title</a></li>
+                        <li><a onClick={() => setSortType("Date")}>By Date</a></li>
+                        <li><a onClick={() => setSortType("Rating")}>By IMDb Rating</a></li>
+                    </ul>
             </div>
+            {/* ascending/descending checkbox */}
+            <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-32 border p-4">
+                <legend className="fieldset-legend secondary-font">Sorting Options</legend>
+                <label className="label secondary-font">
+                    <input type="checkbox" defaultChecked className="checkbox" onChange={() => setAscending(!ascending)}/>
+                    Ascending Order
+                </label>
+            </fieldset>
         </div>
 
-        {/* To be displayed if data is still loading */}
-        {isLoading && 
-            <div className="flex flex-col items-center justify-center gap-5">
-                <h1 className="primary-font text-5xl">Loading data ... please wait</h1>
-                <span class="loading loading-spinner loading-xl"></span>
-            </div>
-        }
         {/* To be displayed if data is not loading and the current data length is bigger than zero */}
-        {!isLoading && sortedData.length > 0 && (
+        {sortedData.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto p-8"> 
 
             {sortedData.map((d, index) => (
@@ -118,7 +125,7 @@ function Dashboard({isLoading, data, addToFav, removeFromFav}){
             </div>
         )}
         {/* To be displayed if data is not loading and the current data length is zero (i.e. no search results) */}
-        {!isLoading && sortedData.length === 0 && (
+        {sortedData.length === 0 && (
             <div className="flex flex-col items-center justify-center gap-5 p-16">
                 <h1 className="secondary-font text-2xl">No movies found.</h1>
             </div>
@@ -126,5 +133,3 @@ function Dashboard({isLoading, data, addToFav, removeFromFav}){
         </>
     );
 }
-
-export default Dashboard;

@@ -2,74 +2,25 @@ import React from "react";
 import { Outlet } from "react-router";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import { useState, useEffect } from "react";
+import { FavoriteMovieProvider } from "../hooks/FavoriteMovieProvider";
 
 const Root = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [data, setData] = useState(null);
-    const [error, setError] = useState(null);
-    const [favMovies, setFavMovies] = useState([]);
-  
-    async function fetchData() {
-      try {
-        const response = await fetch("/movie.json",);
-  
-        if (!response.ok) throw new Error("failed to fetch");
-        const myData = await response.json();
-        console.log(myData);
-        setData(myData);
-        setError(null);
-        console.log(data);
-      } catch (err) {
-        setError(err);
-        console.log(err);
-        console.log(error);
-        setData(null);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  
-    useEffect(() => {
-      fetchData();
-    }, []);
-  
-      /* add a movie to the favorites list, but dont add it if its already in the list. if its already in the list, give an alert */
-      const addToFav = (movie) => {
-        setFavMovies(currentItems => {
-            const existingItem = currentItems.find(item => item.title === movie.title);
-            
-            if (!existingItem) {
-              return [...currentItems, movie]
-            } else {
-              alert("Movie is already in favorites!");
-              return currentItems;
-            }
-        });
-      };
-  
-      /* remove a movie from the favorites list. It takes in a movie object as an argument and updates the favMovies state by filtering out the movie with the matching title. */
-      const removeFromFav = (movie) => {
-        setFavMovies(currentItems => {
-            const existingItem = currentItems.find(item => item.title === movie.title);
-  
-            if (existingItem) {
-              return currentItems.filter(item => item.title !== movie.title);
-            } else {
-              return currentItems;
-            }
-          });
-      };
-
   return (
-    <div className="w-full h-[100vh]">
-      <NavBar favorites={favMovies}/>
-      <div className="min-h-[70vh] p-10 m-10">
-        <Outlet context={{ isLoading, data, error, favMovies, addToFav, removeFromFav }} />
-      </div>
+    <>
+    {/* IMPORTANT: wrap the ENTIRE project in FavoriteMovieProvider. this allows for ALL components to have access to the favorites
+      * movie list and operators if necessary. */}
+      <FavoriteMovieProvider>
+      <div className="w-full h-screen">
+        <NavBar />
+        
+        <div className="min-h-[70vh] p-10 m-10">
+          <Outlet />
+        </div>
 
-      <Footer/>
-    </div>
+        <Footer/>
+      </div>
+      </FavoriteMovieProvider>
+    </>
   );
 };
 

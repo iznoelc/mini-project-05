@@ -1,7 +1,11 @@
 import { Download } from "./FavDownload";
+import { useFavoriteMovies } from "../hooks/FavoriteMovieProvider";
 import Gleebus from "../assets/GleebusLogo.png";
 
-function NavBar({favorites}){
+export default function NavBar(){
+    const { favorites } = useFavoriteMovies();
+    
+
     return(
         <>
             <div className="navbar bg-base-300 shadow-lg">
@@ -26,7 +30,7 @@ function NavBar({favorites}){
                     <div className="h-25 w-25">
                         <img src={Gleebus} alt="GleebusLogo" className="h-full w-full object-contain"></img>
                     </div>
-                    <a className="primary-font px-4 text-2xl fond-extrabold">GLEEBUS' MOVIE MANAGER</a>
+                    <a className="primary-font px-4 text-2xl fond-extrabold">GLEEBUS' MOVIES</a>
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
@@ -38,8 +42,8 @@ function NavBar({favorites}){
                         <ul className="p-2 bg-base-100 w-40 z-1">
                             {favorites.length === 0 ? (
                                 <li><a>No likes yet!</a></li>
-                            ) : (favorites?.map((movie, index) => (
-                                <li><a key={index} className="secondary-font">{movie.title}</a></li>
+                            ) : (favorites?.map((movie) => (
+                                <li key={movie.title}><a className="secondary-font">{movie.title}</a></li>
                             )))}
                         </ul>
                         </details>
@@ -53,5 +57,3 @@ function NavBar({favorites}){
         </>
     );
 }
-
-export default NavBar;

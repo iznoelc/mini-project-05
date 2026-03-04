@@ -16,6 +16,8 @@ export default function Home(){
 
     return(
         <>
+        <h1>Home</h1>
+
         {slicedData.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto p-8"> 
 
@@ -35,6 +37,10 @@ export default function Home(){
             ))}
             </div>
         )}  
+
+        <a href="/dashboard"> See More Movies</a>
+
         </>
     );
 }
+

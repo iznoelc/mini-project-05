@@ -54,7 +54,7 @@ export default function Dashboard(){
 
     // temp
     
-
+    if(true){
     return (
         <>
         
@@ -131,5 +131,8 @@ export default function Dashboard(){
             </div>
         )}
         </>
-    );
+    );}
+    else{
+        return( <Navigate to="/signup" replace />);
+    }
 }

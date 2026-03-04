@@ -15,7 +15,10 @@ const MainRouter = [
     Component: Root,
     ErrorBoundary: ErrorBoundary,
     children: [
-      { index: true, Component: Home },
+      { index: true,
+        Component: Home,
+        loader: movieDataLoader,
+        HydrateFallback: FallbackElement },
       { path: "dashboard",
         Component: Dashboard,
         loader: movieDataLoader,

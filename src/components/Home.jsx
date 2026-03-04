@@ -1,45 +1,40 @@
-import { useEffect } from "react";
+import { useMemo } from "react";
 import { useLoaderData } from "react-router-dom";
 
-function Home(){
+export default function Home(){
 
-    const dataFromLoader = useLoaderData();
-    const data = [data, setData];
-    useEffect(() => {
-            if (dataFromLoader) {
-                setData(dataFromLoader);
-            }
-        }, [dataFromLoader]);
-        
-    const splicedData = useMemo(() => {
+    const data = useLoaderData();
+
+    const slicedData = useMemo(() => {
         if (!data) return []; // if there is no data, return null for filteredData
-        return data.splice(0,3)
+        ; // set the data to the data from the loader, which is the movie data from movie.json;
+        return data.slice(0,3)
     }, [data]);     
+
+    console.log("sliced data:", slicedData);
     
 
     return(
-        <d>
-        <h1>Home</h1>
-        {dataFromLoader.length > 0 && (
-            {splicedData.map((d, index) => (
-                            <div key={index} className="card w-96 bg-base-100 card-xs shadow-sm">
-                                <div className="card-body">
-                                    {/* put the title and description of the movie in the cards */}
-                                    <h2 className="card-title primary-font text-2xl" key={index}>{d.title} ({d.releasing_year})</h2>
-                                    <p className="secondary-font text-base">{d.imdb_rating}/10 - {d.runtime}</p>
-                                    <p className="secondary-font text-sm">{d.short_description}</p>
-                                    
-                                    <div className="justify-end card-actions">
-                                    
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                )}
-        <a href="/dashboard"> See More Movies</a>
+        <>
+        {slicedData.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto p-8"> 
 
-        </d>
+            {slicedData.map((d, index) => (
+                <div key={index} className="card w-96 bg-base-100 card-xs shadow-sm">
+                    <div className="card-body">
+                        {/* put the title and description of the movie in the cards */}
+                        <h2 className="card-title primary-font text-2xl" key={index}>{d.title} ({d.releasing_year})</h2>
+                        <p className="secondary-font text-base">{d.imdb_rating}/10 - {d.runtime}</p>
+                        <p className="secondary-font text-sm">{d.short_description}</p>
+                        
+                        <div className="justify-end card-actions">
+
+                        </div>
+                    </div>
+                </div>
+            ))}
+            </div>
+        )}  
+        </>
     );
 }
-
-export default Home;

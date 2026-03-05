@@ -13,12 +13,25 @@ import {
 import useAuth from "../hooks/useAuth";
 import GleebusShip from "../assets/GleebusShip.png";
 import FallbackElement from "./FallbackElement";
+import { Zoom, toast } from "react-toastify";
 
 function SignUpPage(){    
     const navigate = useNavigate(); // this is used to navigate the user to a new page after successful sign up
     const { signInWithGoogle, createUser, loggedIn } = useAuth(); // sign up with email and password or with google uses functions from the useAuth custom hook 
     const [signUpLoading, setSignUpLoading] = useState(false); // determine if sign up process is loading, separate from loading in useAuth
     console.log("logged in: " + loggedIn); 
+
+    const errorNotify = () => toast.error('Error signing up. Please try again.', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Zoom,
+    });
 
     // this is the form data that is updated when the user enters information into one of the text fields
     const [formData, setFormData] = useState({
@@ -59,7 +72,8 @@ function SignUpPage(){
         })
         .catch((error) => {
             // give the user an alert if sign up was unsuccessful and log errors for debugging
-            alert("Error signing up. Please try again.");
+            errorNotify();
+            setSignUpLoading(false);
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log("error code: ", errorCode);
@@ -91,6 +105,8 @@ function SignUpPage(){
             // ...
         })
         .catch((error) => {
+            errorNotify();
+            setSignUpLoading(false);
             // unsuccessful sign up
             const errorCode = error.code;
             const errorMessage = error.message;

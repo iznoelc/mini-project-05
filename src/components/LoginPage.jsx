@@ -12,11 +12,23 @@ import {
 } from "firebase/auth";
 import GleebusPeace from "../assets/GleebusPeace.png";
 import FallbackElement from "./FallbackElement";
+import { Zoom, toast } from 'react-toastify';
 
 function LoginPage(){
     const navigate = useNavigate(); // used to navigate to a new page after successful login
     const { signInWithGoogle, signInUser } = useAuth(); // use functions from custom use auth hook to sign in with google or with email and password
     const [loginLoading, setLoginLoading] = useState(false); // separate loading to determine if the user is currently being logged in. (this is separate from the loading in useAuth)
+    const errorNotify = () => toast.error('Error signing in. Please try again.', {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Zoom,
+    });
     
     // this is the form data that is updated when the user updates one of the fields
     const [formData, setFormData] = useState({
@@ -55,7 +67,9 @@ function LoginPage(){
         })
         .catch((error) => {
             // unsuccessful sign in, give the user an alert so they know to try again, log errors for debugging.
-            alert("Incorrect email or password. Please try again.");
+            //alert("Incorrect email or password. Please try again.");
+            errorNotify();
+            setLoginLoading(false);
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log("error code: ", errorCode);
@@ -77,6 +91,7 @@ function LoginPage(){
         })
         .catch((error) => {
             // unsuccessful sign in, handle errors
+            errorNotify();
             const errorCode = error.code;
             const errorMessage = error.message;
 
@@ -90,6 +105,8 @@ function LoginPage(){
             console.log("error message: ", errorMessage);
             console.log("email: ", email);
             console.log("credential: ", credential);
+
+            setLoginLoading(false);
       });
     }
 

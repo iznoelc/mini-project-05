@@ -2,13 +2,13 @@ import { useState, useMemo, useEffect } from "react";
 import DataSorter from "./DataSorter";
 import Search from "./Search";
 //import handleChangeInSearch from "./Search";
-import { AiFillLike } from "react-icons/ai";
-import { AiFillDislike } from "react-icons/ai";
+import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useLoaderData } from "react-router-dom";
-import { useFavoriteMovies } from "../hooks/FavoriteMovieProvider";
+// import { useFavoriteMovies } from "../hooks/FavoriteMovieProvider";
+import useFavoriteMovies from "../hooks/useFavoriteMovies";
 
 export default function Dashboard(){
-    const { addToFav, removeFromFav } = useFavoriteMovies();
+    const { favorites, addToFav, removeFromFav } = useFavoriteMovies();
     // get the data from the dashboard loader in MainRouter using useLoaderData
      const dataFromLoader = useLoaderData();
 
@@ -50,11 +50,14 @@ export default function Dashboard(){
         return DataSorter(sortType, ascending, filteredData);
     }, [filteredData, sortType, ascending, data]);
 
+    // check if movie is in favorites list by checking if the title of the movie is in the favorites list. return true if it is, false if it isnt.
+    const isFavorite = (movie) => {
+        return favorites.some(fav => fav.title === movie.title);
+    }
+    
+
     console.log("Sorted data:", sortedData);
 
-    // temp
-    
-    if(true){
     return (
         <>
         
@@ -101,7 +104,7 @@ export default function Dashboard(){
 
         {/* To be displayed if data is not loading and the current data length is bigger than zero */}
         {sortedData.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto p-8"> 
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mx-auto p-8"> 
 
             {sortedData.map((d, index) => (
                 <div key={index} className="card w-96 bg-base-100 card-xs shadow-sm">
@@ -109,14 +112,17 @@ export default function Dashboard(){
                         {/* put the title and description of the movie in the cards */}
                         <h2 className="card-title primary-font text-2xl" key={index}>{d.title} ({d.releasing_year})</h2>
                         <p className="secondary-font text-base">{d.imdb_rating}/10 - {d.runtime}</p>
+                        <div className="flex gap-2">
+                            <div className="badge badge-neutral">{d.genre}</div>
+                            <div className="badge badge-primary">{d.age_group}</div>
+                        </div>
                         <p className="secondary-font text-sm">{d.short_description}</p>
-                        
+
                         <div className="justify-end card-actions">
-                        <button className="text-xl transform transition-transform duration-75 hover:text-green-500 hover:scale-125 hover:cursor-pointer" onClick={() => addToFav(d)}>
+                        <button className={`text-xl transform transition-transform duration-75 hover:scale-125 hover:cursor-pointer
+                        ${isFavorite(d) ? "text-primary hover:text-error" : "hover:text-primary"}`}
+                            onClick={isFavorite(d) ? () => removeFromFav(d) : () => addToFav(d)}>
                             <AiFillLike />
-                        </button>
-                        <button className="text-xl transform transition-transform duration-75 hover:text-red-500 hover:scale-125 hover:cursor-pointer" onClick={() => removeFromFav(d)}>
-                            <AiFillDislike />
                         </button>
                         </div>
                     </div>
@@ -131,8 +137,5 @@ export default function Dashboard(){
             </div>
         )}
         </>
-    );}
-    else{
-        return( <Navigate to="/signup" replace />);
-    }
+    );
 }

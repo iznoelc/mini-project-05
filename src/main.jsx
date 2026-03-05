@@ -4,15 +4,19 @@ import './index.css'
 // import App from './App.jsx'
 // import { createBrowserRouter } from "react-router";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import FallbackElement from "./components/FallbackElement";
+import FallbackElement from "./components/FallbackElement"
 
 
-import MainRouter from "./routes/MainRouter.js";
+import MainRouter from "./routes/MainRouter.jsx";
+import AuthProvider from './contexts/AuthProvider.jsx';
 
 const router = createBrowserRouter(MainRouter);
 
 createRoot(document.getElementById('root')).render(
+  
   <StrictMode>
-    <RouterProvider router={router} fallbackElement={<FallbackElement />} />
+    <AuthProvider>
+      <RouterProvider router={router} fallbackElement={<FallbackElement />} />
+    </AuthProvider>
   </StrictMode>,
 )

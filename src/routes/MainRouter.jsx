@@ -8,6 +8,8 @@ import LoginPage from "../components/LoginPage";
 import { movieDataLoader } from "../loaders/loaders";
 import FallbackElement from "../components/FallbackElement";
 import ErrorPage, { ErrorBoundary } from "../components/ErrorPage";
+import PrivateRoute from "./PrivateRoute";
+
 
 const MainRouter = [
   {
@@ -19,8 +21,13 @@ const MainRouter = [
         Component: Home,
         loader: movieDataLoader,
         HydrateFallback: FallbackElement },
-      { path: "dashboard",
-        Component: Dashboard,
+      { 
+        path: "dashboard",
+        element: (
+          <PrivateRoute>
+            <Dashboard></Dashboard>
+          </PrivateRoute>
+        ),
         loader: movieDataLoader,
         HydrateFallback: FallbackElement
       },

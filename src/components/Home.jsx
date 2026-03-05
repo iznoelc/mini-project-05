@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useLoaderData } from "react-router-dom";
+import GleebusFilm from "../assets/GleebusFilm.png"; 
 
 export default function Home(){
 
@@ -16,12 +17,21 @@ export default function Home(){
 
     return(
         <>
-                <div class="hero bg-base-200 min-h-screen">
-        <div class="hero-content text-center">
-            <div class="max-w-md">
-            <h1 class="text-5xl font-bold">Home</h1>
+        <div className="hero bg-base-200 min-h-96">
+            <div className="hero-content text-center gap-5">
+                <div className="max-w-md">
+                <img src={GleebusFilm} alt="GleebusFilm" className="object-contain mx-auto mb-4"></img>
+                <h1 className="text-5xl font-bold primary-font">Welcome To Gleebus' Movies</h1>
+                <p className="py-2">
+                    Providing you with the most out of this world movie database for you to like, dislike, and explore. 
+                    Sign up or log in to get started on your movie journey with us!
+                </p>
+                </div>
+            </div>
+        </div>
+        <div className="flex items-center justify-center gap-5">
              {slicedData.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto p-8"> 
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-8xl mx-auto p-8"> 
 
             {slicedData.map((d, index) => (
                 <div key={index} className="card w-96 bg-base-100 card-xs shadow-sm">
@@ -39,11 +49,10 @@ export default function Home(){
             ))}
             </div>
         )}  
-            <a href="/dashboard"> See More Movies</a>
             </div>
-        </div>
-        </div>
-
+            <div className="flex flex-col items-center justify-center gap-5">
+                 <p className="secondary-font"><a href="/dashboard" className="btn btn-primary">See More Movies</a></p>
+            </div>
         </>
     );
 }

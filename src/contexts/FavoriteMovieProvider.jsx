@@ -1,17 +1,10 @@
-/* FavoriteMovieProvider.jsx 
- * provides a custom hook for using the favorites movie list globally, using react's useContext and createContext. 
- * code references from previous mini-project-04 presentations and this youtube tutorial
- * https://www.youtube.com/watch?v=0DRj470vJ74
- */ 
+import React, { useState } from "react";
+import { FavoriteMovieContext } from "../contexts/FavoriteMovieContext";
 
-import { useState, createContext, useContext } from "react";
-
-// create the context 
-const FavoriteMovieContext = createContext();
 
 // set up what the context will do. for favorite movies, it creates functions to add to favorites, remove from favorites, and the favorites list
 // make sure it takes children as a prop, because this allows all components wrapped in this component access to the context.
-export function FavoriteMovieProvider({children}) {
+export default function FavoriteMovieProvider({children}) {
   const [favorites, setFavMovies] = useState([]);
     /* add a movie to the favorites list, but dont add it if its already in the list. if its already in the list, give an alert */
     const addToFav = (movie) => {
@@ -46,9 +39,4 @@ export function FavoriteMovieProvider({children}) {
       {children}
     </FavoriteMovieContext.Provider>
   );
-}
-
-// export the context for use as a hook 
-export function useFavoriteMovies() {
-  return useContext(FavoriteMovieContext);
 }

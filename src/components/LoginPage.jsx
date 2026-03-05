@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase/firebase.config";
+import { FcGoogle } from "react-icons/fc";
+import useAuth from "../hooks/useAuth";
 import {
   GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  signInWithPopup,
 } from "firebase/auth";
 
 function LoginPage(){
     const navigate = useNavigate();
+    const { user, setUser, signInWithGoogle, signInUser, loggedIn, loading, setLoading } = useAuth();
+    
     const provider = new GoogleAuthProvider();
 
     const [formData, setFormData] = useState({
@@ -28,12 +29,12 @@ function LoginPage(){
         event.preventDefault(); // Prevents page reload
         console.log("Form Submitted:", formData);
         
-        signInWithEmailAndPassword(auth, formData.email, formData.password)
+        signInUser(formData.email, formData.password)
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
             console.log(user);
-            navigate("/", { replace: true });
+            navigate("/dashboard", { replace: true });
         })
         .catch((error) => {
             alert("Incorrect email or password. Please try again.");
@@ -43,11 +44,11 @@ function LoginPage(){
     };
 
     const handleGoogleSignIn = () => {
-        signInWithPopup(auth, provider)
+        signInWithGoogle()
         .then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
+            // const credential = GoogleAuthProvider.credentialFromResult(result);
+            // const token = credential.accessToken;
             // The signed-in user info.
             const user = result.user;
             console.log(user.displayName);
@@ -131,14 +132,16 @@ function LoginPage(){
                         onChange={handleChange}
                     />
                 </label>
-                <button className="btn bg-base-100x mt-4" onClick={handleGoogleSignIn}>Google</button>
-                <button type="submit" className="btn bg-base-100x  mt-4 hover:bg-success">Login</button>
+                
+                <button type="submit" className="btn btn-primary mt-4">Login</button>
+                <p className="secondary-font mt-4 text-center"><i>OR</i></p>
+                <button type="button" className="btn bg-base-100x mt-4" onClick={handleGoogleSignIn}><FcGoogle /> Sign in with Google</button>
                 
                 
             </fieldset>
         </form>
         <div className="flex items-center justify-center gap-5">
-            <p className="secondary-font">New to the Gleebuslings? <a href="/signup" className="hover:text-success text-center">Sign Up Here</a></p>
+            <p className="secondary-font">New to the Gleebuslings? <a href="../signup" className="hover:text-primary text-center">Sign Up Here</a></p>
         </div>
         </div>
         </>

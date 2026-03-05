@@ -1,13 +1,23 @@
 import { Download } from "./FavDownload";
-import { useFavoriteMovies } from "../hooks/FavoriteMovieProvider";
+// import { useFavoriteMovies } from "../hooks/FavoriteMovieProvider";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import { FaHome, FaHeart } from "react-icons/fa";
+import { RxDashboard } from "react-icons/rx";
 import Gleebus from "../assets/GleebusLogo.png";
+import useFavoriteMovies from "../hooks/useFavoriteMovies";
 
 export default function NavBar(){
     const { favorites } = useFavoriteMovies();
+    const { user, signOutUser, loggedIn } = useAuth();
+    const navigate = useNavigate();
+
+    console.log("User display name " + user?.displayName);
     
-    if (true){
     return(
         <>
+        {loggedIn && (
+            <div>
             <div className="navbar bg-base-300 shadow-lg">
                 <div className="navbar-start">
                     <div className="dropdown">
@@ -34,11 +44,11 @@ export default function NavBar(){
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
-                    <li><a className="secondary-font">Home</a></li>
-                    <li><a className="secondary-font">Profile</a></li>
+                    <li><a className="secondary-font" href="../">{<FaHome />} Home</a></li>
+                    <li><a className="secondary-font" href="../dashboard"><RxDashboard /> Dashboard</a></li>
                     <li>
                         <details>
-                        <summary className="secondary-font">My Liked Movies</summary>
+                        <summary className="secondary-font"><FaHeart /> My Liked Movies</summary>
                         <ul className="p-2 bg-base-100 w-40 z-1">
                             {favorites.length === 0 ? (
                                 <li><a>No likes yet!</a></li>
@@ -51,15 +61,21 @@ export default function NavBar(){
                     </ul>
                 </div>
                 <div className="navbar-end">
-                    <button className="btn secondary-font" onClick={() => Download(favorites)}>Download Favorites</button>
+                    <div className="flex flex-col items-center gap-4">
+                        <p>Welcome back, {user?.displayName || user?.email}</p>
+                        <div className="flex items-center gap-4">
+                            <button className="btn secondary-font" onClick={() => Download(favorites)}>Download Favorites</button>
+                            <button className="btn secondary-font" onClick={signOutUser}>Sign out</button>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
-        </>
-    );}
-    else{
-        return(
-        <>
-            <div className="navbar bg-base-300 shadow-lg">
+            </div>
+        )}
+        { !loggedIn && (
+            <div>
+                <div className="navbar bg-base-300 shadow-lg">
                 <div className="navbar-start">
                     <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -68,14 +84,7 @@ export default function NavBar(){
                     <ul
                         tabIndex="-1"
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li><a href="../"> Home</a></li>
-                        <li><a href="/login">Profile</a></li>
-                        <li>
-                        <ul className="p-2">
-                            <li><a>Submenu 1</a></li>
-                            <li><a>Submenu 2</a></li>
-                        </ul>
-                        </li>
+                        <li><a href="../">Home</a></li>
                     </ul>
                     </div>
                     <div className="h-25 w-25">
@@ -85,13 +94,16 @@ export default function NavBar(){
                 </div>
                 <div className="navbar-center hidden lg:flex">
                     <ul className="menu menu-horizontal px-1">
-                    <li><a className="secondary-font">Home</a></li>
-                    <li><a className="secondary-font">Profile</a></li>
-                    
+                    <li><a className="secondary-font" href="../">{<FaHome />} Home</a></li>
                     </ul>
                 </div>
-                
+                <div className="navbar-end">
+                    <button className="btn secondary-font" onClick={() => navigate("/login")}>Login</button>
+                    <button className="btn btn-primary secondary-font" onClick={() => navigate("/signup")}>Sign Up</button>
+                </div>
             </div>
+            </div>
+        )}
         </>
-        );}
+    );
 }

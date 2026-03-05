@@ -2,7 +2,9 @@ import React from "react";
 import { Outlet } from "react-router";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import { FavoriteMovieProvider } from "../hooks/FavoriteMovieProvider";
+// import { FavoriteMovieProvider } from "../hooks/FavoriteMovieProvider";
+import FavoriteMovieProvider from '../contexts/FavoriteMovieProvider.jsx';
+
 
 const Root = () => {
   return (

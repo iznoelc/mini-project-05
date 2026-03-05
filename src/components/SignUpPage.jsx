@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase/firebase.config";
+import { FcGoogle } from "react-icons/fc";
 import {
-  createUserWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
+import useAuth from "../hooks/useAuth";
 
 function SignUpPage(){
     // connectAuthEmulator(auth, "http://localhost:5173");
+    
     const navigate = useNavigate();
-    const provider = new GoogleAuthProvider();
+    // const provider = new GoogleAuthProvider();
+    const { user, setUser, signInWithGoogle, createUser, loggedIn } = useAuth();
+    console.log("logged in: " + loggedIn);
     // const [password, setPassword] = useState("");
     
 
@@ -32,12 +35,18 @@ function SignUpPage(){
         event.preventDefault(); // Prevents page reload
         console.log("Form Submitted:", formData);
         
-        createUserWithEmailAndPassword(auth, formData.email, formData.password)
+        createUser(formData.email, formData.password)
         .then((userCredential) => {
             // Signed up
             const user = userCredential.user;
             console.log(user);
-            navigate("/", { replace: true });
+            console.log("loggedIn: " + loggedIn);
+
+                        updateProfile(user, {
+                displayName: formData.username
+            });
+
+            navigate("/dashboard", { replace: true });
             // ...
         })
         .catch((error) => {
@@ -48,17 +57,26 @@ function SignUpPage(){
     };
 
     const handleGoogleSignUp = () => {
-        signInWithPopup(auth, provider)
+        signInWithGoogle()
         .then((result) => {
             // This gives you a Google Access Token. You can use it to access the Google API.
-            const credential = GoogleAuthProvider.credentialFromResult(result);
-            const token = credential.accessToken;
+            //const credential = GoogleAuthProvider.credentialFromResult(result);
+            //const token = credential.accessToken;
             // The signed-in user info.
-            const user = result.user;
-            console.log(user.displayName);
-            navigate("/", { replace: true });
+            console.log(result.user);
+            const newUser = {
+                name: result.user.displayName,
+                email: result.user.email,
+                image: result.user.photoURL,
+            };
+            console.log(newUser);
+            
+            //navigate("/", { replace: true });
             //console.log(token);
             // IdP data available using getAdditionalUserInfo(result)
+
+
+            navigate("/dashboard", { replace: true });
             // ...
         })
         .catch((error) => {
@@ -188,12 +206,13 @@ function SignUpPage(){
                     Must be more than 8 characters, including
                     <br />At least one number <br />At least one lowercase letter <br />At least one uppercase letter
                 </p>
-                <button onClick={handleGoogleSignUp} className="btn bg-base-100x mt-4">Google</button>
-                <button type="submit" className="btn bg-base-100x  mt-4 hover:bg-success">Create Account and Login</button>
+                <button type="submit" className="btn btn-primary mt-4">Create Account and Login</button>
+                <p className="secondary-font mt-4 text-center"><i>OR</i></p>
+                <button type="button" className="btn bg-base-100x mt-4" onClick={handleGoogleSignUp}><FcGoogle /> Sign in with Google</button>
             </fieldset>
         </form>
         <div className="flex items-center justify-center gap-5">
-            <p className="secondary-font">Already joined the Gleebuslings? <a href="/login" className="hover:text-success text-center">Login Here</a></p>
+            <p className="secondary-font">Already joined the Gleebuslings? <a href="/login" className="hover:text-primary text-center">Login Here</a></p>
         </div>
         </div>
         </>

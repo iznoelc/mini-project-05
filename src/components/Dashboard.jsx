@@ -101,10 +101,10 @@ export default function Dashboard(){
 
         {/* To be displayed if data is not loading and the current data length is bigger than zero */}
         {sortedData.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mx-auto p-8"> 
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mx-auto p-8"> 
 
             {sortedData.map((d, index) => (
-                <div key={index} className="card w-96 bg-base-100 card-xs shadow-sm">
+                <div key={index} className="card w-full bg-base-100 card-xs shadow-sm">
                     <div className="card-body">
                         {/* put the title and description of the movie in the cards */}
                         <h2 className="card-title primary-font text-2xl" key={index}>{d.title} ({d.releasing_year})</h2>

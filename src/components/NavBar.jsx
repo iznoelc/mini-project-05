@@ -1,5 +1,4 @@
 import { Download } from "./FavDownload";
-// import { useFavoriteMovies } from "../hooks/FavoriteMovieProvider";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { FaHome, FaHeart } from "react-icons/fa";
@@ -16,6 +15,8 @@ export default function NavBar(){
     
     return(
         <>
+        {/* this is the navbar to be displayed if the user has successfully logged in, which includes links to the home and dashboard pages,
+        a dropdown of the user's liked movies, and a welcome message with the user's name and a sign out button */}
         {loggedIn && (
             <div>
             <div className="navbar bg-base-300 shadow-lg">
@@ -73,6 +74,7 @@ export default function NavBar(){
             </div>
             </div>
         )}
+        {/* this is the navbar to be displayed if the user has not logged in yet, which includes links to the home and login/signup pages */}
         { !loggedIn && (
             <div>
                 <div className="navbar bg-base-300 shadow-lg">

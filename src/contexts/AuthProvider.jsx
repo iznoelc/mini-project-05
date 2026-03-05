@@ -1,6 +1,10 @@
+/** AuthProvider.jsx
+ * provides the authentication context for the app, using firebase's authentication system.
+ * currently provides ways to get the user, loading state, createUser (email & google), signInUser (email & google), and signOutUser.
+ * also uses onAuthStateChanged observer from firebase to determine when a user is logged in or not and update states accordingly.
+ */
+
 import React, { useEffect, useState } from "react";
-
-
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -22,28 +26,24 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const createUser = (email, password) => {
-    // setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   const signInUser = (email, password) => {
-    // setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
   const signInWithGoogle = () => {
-    // setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
   const signOutUser = () => {
-    // setLoading(true);
     return signOut(auth);
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        console.log("Auth state changed:", currentUser);
+      console.log("Auth state changed:", currentUser);
       setUser(currentUser);
       setLoading(false);
     });
@@ -54,10 +54,12 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   // prevents error if auth is still loading and the user is trying to access a protected route
+  // i.e. if user is trying to access dashboard and refreshes, prevents an error from showing if they are already logged in 
   if (loading) {
     return <div className="pt-64"><FallbackElement /></div>;
   }
 
+  // all variables that should be passed from this provider to its children so it can be used in all child components
   const authInfo = {
     createUser,
     signInUser,

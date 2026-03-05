@@ -1,3 +1,5 @@
+// allows for useFavoriteMovies to be used in other files
+
 import { useContext } from "react";
 import { FavoriteMovieContext } from "../contexts/FavoriteMovieContext";
 

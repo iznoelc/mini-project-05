@@ -16,5 +16,6 @@ export function Download(myFavorites){
     a.download = "YourFavorites.txt";
     a.click();
     URL.revokeObjectURL(url); 
-return;
+
+    return;
 }

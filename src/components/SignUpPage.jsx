@@ -1,3 +1,8 @@
+/** SignupPage.jsx
+ *  this is the page where the users can sign up by entering a username (sets the user's display name when they make an account w email and password)
+ *  email, and password or sign up with google, using firebase authentication 
+ */
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
@@ -6,24 +11,26 @@ import {
   updateProfile,
 } from "firebase/auth";
 import useAuth from "../hooks/useAuth";
+import GleebusShip from "../assets/GleebusShip.png";
+import FallbackElement from "./FallbackElement";
 
-function SignUpPage(){
-    // connectAuthEmulator(auth, "http://localhost:5173");
-    
-    const navigate = useNavigate();
-    // const provider = new GoogleAuthProvider();
-    const { user, setUser, signInWithGoogle, createUser, loggedIn } = useAuth();
-    console.log("logged in: " + loggedIn);
-    // const [password, setPassword] = useState("");
-    
+function SignUpPage(){    
+    const navigate = useNavigate(); // this is used to navigate the user to a new page after successful sign up
+    const { signInWithGoogle, createUser, loggedIn } = useAuth(); // sign up with email and password or with google uses functions from the useAuth custom hook 
+    const [signUpLoading, setSignUpLoading] = useState(false); // determine if sign up process is loading, separate from loading in useAuth
+    console.log("logged in: " + loggedIn); 
 
+    // this is the form data that is updated when the user enters information into one of the text fields
     const [formData, setFormData] = useState({
         username: "",
         email: "",
         password: ""
     });
 
+    // this is the method called when the user types into one of the text fields
     const handleChange = (event) => {
+        // here, name is the name of the field (i.e. email)
+        // value is what is being typed into the field (i.e. gleebus@gleepglorp.net)
         const {name, value} = event.target;
         setFormData((prevState) =>({
             ...prevState,
@@ -31,13 +38,15 @@ function SignUpPage(){
         }));
     };
 
+    // called when user hits the sign up button
     const handleSubmit = (event) => {
         event.preventDefault(); // Prevents page reload
         console.log("Form Submitted:", formData);
+        setSignUpLoading(true);
         
         createUser(formData.email, formData.password)
         .then((userCredential) => {
-            // Signed up
+            // successful sign up
             const user = userCredential.user;
             console.log(user);
             console.log("loggedIn: " + loggedIn);
@@ -45,24 +54,26 @@ function SignUpPage(){
                         updateProfile(user, {
                 displayName: formData.username
             });
-
+            setSignUpLoading(false);
             navigate("/dashboard", { replace: true });
-            // ...
         })
         .catch((error) => {
+            // give the user an alert if sign up was unsuccessful and log errors for debugging
+            alert("Error signing up. Please try again.");
             const errorCode = error.code;
             const errorMessage = error.message;
-            // ..
+            console.log("error code: ", errorCode);
+            console.log("error message: ", errorMessage);
+            
         });
     };
 
+    // this is called when the user signs up with google
     const handleGoogleSignUp = () => {
+        setSignUpLoading(true);
+
         signInWithGoogle()
         .then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            //const credential = GoogleAuthProvider.credentialFromResult(result);
-            //const token = credential.accessToken;
-            // The signed-in user info.
             console.log(result.user);
             const newUser = {
                 name: result.user.displayName,
@@ -74,39 +85,35 @@ function SignUpPage(){
             //navigate("/", { replace: true });
             //console.log(token);
             // IdP data available using getAdditionalUserInfo(result)
-
+            setSignUpLoading(false);
 
             navigate("/dashboard", { replace: true });
             // ...
         })
         .catch((error) => {
-            // Handle Errors here.
+            // unsuccessful sign up
             const errorCode = error.code;
             const errorMessage = error.message;
             // The email of the user's account used.
             const email = error.customData.email;
             // The AuthCredential type that was used.
             const credential = GoogleAuthProvider.credentialFromError(error);
-            // ...
+            
+            // log errors for debugging
+            console.log("error code: ", errorCode);
+            console.log("error message: ", errorMessage);
+            console.log("email: ", email);
+            console.log("credential: ", credential);
       });
     }
 
-    // const auth = getAuth();
-    // createUserWithEmailAndPassword(auth, email, password)
-    // .then((userCredential) => {
-    //         // Signed up 
-    //         const user = userCredential.user;
-    //         // ...
-    // })
-    // .catch((error) => {
-    //         const errorCode = error.code;
-    //         const errorMessage = error.message;
-    //         // ..
-    // });
-
     return(
         <>
-        <div className="flex flex-col items-center justify-center gap-5">
+        {signUpLoading && (<FallbackElement />)}
+        {!signUpLoading && (
+            <div className="flex flex-col items-center justify-center gap-5">
+            <img src={GleebusShip} className="w-64 h-auto object-contain mx-auto mb-4"></img>
+            <h1 className="primary-font text-primary text-2xl">Get Started</h1>
             <form onSubmit={handleSubmit}>
             <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xl border p-4">
                 <legend className="fieldset-legend">Sign Up</legend>
@@ -206,15 +213,18 @@ function SignUpPage(){
                     Must be more than 8 characters, including
                     <br />At least one number <br />At least one lowercase letter <br />At least one uppercase letter
                 </p>
+                {/* buttons to sign up with email and password or google */}
                 <button type="submit" className="btn btn-primary mt-4">Create Account and Login</button>
                 <p className="secondary-font mt-4 text-center"><i>OR</i></p>
-                <button type="button" className="btn bg-base-100x mt-4" onClick={handleGoogleSignUp}><FcGoogle /> Sign in with Google</button>
+                <button type="button" className="btn bg-base-100x mt-4" onClick={handleGoogleSignUp}><FcGoogle /> Sign up with Google</button>
             </fieldset>
         </form>
+        {/* redirect to sign in if the user already has an account */}
         <div className="flex items-center justify-center gap-5">
             <p className="secondary-font">Already joined the Gleebuslings? <a href="/login" className="hover:text-primary text-center">Login Here</a></p>
         </div>
         </div>
+        )};
         </>
     );
 }

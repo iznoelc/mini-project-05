@@ -1,16 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
-import DataSorter from "./DataSorter";
-import Search from "./Search";
-//import handleChangeInSearch from "./Search";
+import DataSorter from "../utils/DataSorter";
+import Search from "../utils/Search";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { useLoaderData } from "react-router-dom";
-// import { useFavoriteMovies } from "../hooks/FavoriteMovieProvider";
 import useFavoriteMovies from "../hooks/useFavoriteMovies";
 
 export default function Dashboard(){
-    const { favorites, addToFav, removeFromFav } = useFavoriteMovies();
-    // get the data from the dashboard loader in MainRouter using useLoaderData
-     const dataFromLoader = useLoaderData();
+    const { favorites, addToFav, removeFromFav } = useFavoriteMovies(); // use custom hook to get the favorites list and functions to add/remove movies from favorites
+     const dataFromLoader = useLoaderData(); // get the data from the dashboard loader in MainRouter using useLoaderData
 
     const [data, setData] = useState(null); // the movie data
     const [sortType, setSortType] = useState("Date"); // default sort type

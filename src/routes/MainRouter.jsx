@@ -10,7 +10,6 @@ import FallbackElement from "../components/FallbackElement";
 import ErrorPage, { ErrorBoundary } from "../components/ErrorPage";
 import PrivateRoute from "./PrivateRoute";
 
-
 const MainRouter = [
   {
     path: "/",

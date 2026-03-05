@@ -1,3 +1,8 @@
+/** LoginPage.jsx
+ *  login page component, which displays a text field for email and password, as well as a button to submit the form and a button to sign in with google.
+ *  uses daisyUI form components to make sure a valid password and email are being entered.
+ */
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
@@ -5,19 +10,24 @@ import useAuth from "../hooks/useAuth";
 import {
   GoogleAuthProvider,
 } from "firebase/auth";
+import GleebusPeace from "../assets/GleebusPeace.png";
+import FallbackElement from "./FallbackElement";
 
 function LoginPage(){
-    const navigate = useNavigate();
-    const { user, setUser, signInWithGoogle, signInUser, loggedIn, loading, setLoading } = useAuth();
+    const navigate = useNavigate(); // used to navigate to a new page after successful login
+    const { signInWithGoogle, signInUser } = useAuth(); // use functions from custom use auth hook to sign in with google or with email and password
+    const [loginLoading, setLoginLoading] = useState(false); // separate loading to determine if the user is currently being logged in. (this is separate from the loading in useAuth)
     
-    const provider = new GoogleAuthProvider();
-
+    // this is the form data that is updated when the user updates one of the fields
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     });
 
+    // this updates the form data based on what is being typed into the text fields
     const handleChange = (event) => {
+        // here, name is the name of the field (i.e. email)
+        // value is what is being typed into the field (i.e. gleebus@gleepglorp.net)
         const {name, value} = event.target;
         setFormData((prevState) =>({
             ...prevState,
@@ -25,54 +35,71 @@ function LoginPage(){
         }));
     };
 
+    // this is what happens when the user clicks the submit button
     const handleSubmit = (event) => {
-        event.preventDefault(); // Prevents page reload
-        console.log("Form Submitted:", formData);
-        
+        event.preventDefault(); // prevents page reload
+        console.log("Form Submitted:", formData); // logs the data entered into the form
+        setLoginLoading(true)
+
+        // signs the user in. this method is from the useAuth custom hook, which uses firebase authentication to sign the user in.
         signInUser(formData.email, formData.password)
         .then((userCredential) => {
-            // Signed in 
+            // successful sign in
             const user = userCredential.user;
             console.log(user);
+
+            setLoginLoading(false);
+
+            // take the user to the dashboard after they log in
             navigate("/dashboard", { replace: true });
         })
         .catch((error) => {
+            // unsuccessful sign in, give the user an alert so they know to try again, log errors for debugging.
             alert("Incorrect email or password. Please try again.");
             const errorCode = error.code;
             const errorMessage = error.message;
+            console.log("error code: ", errorCode);
+            console.log("error message: ", errorMessage);
         });
     };
 
+    // this is whats called when the user signs in with google, using firebase authentication to sign the user in with google.
     const handleGoogleSignIn = () => {
+        setLoginLoading(true);
+
         signInWithGoogle()
         .then((result) => {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            // const credential = GoogleAuthProvider.credentialFromResult(result);
-            // const token = credential.accessToken;
-            // The signed-in user info.
+            // successful sign in
             const user = result.user;
             console.log(user.displayName);
+            setLoginLoading(false)
             navigate("/", { replace: true });
-            //console.log(token);
-            // IdP data available using getAdditionalUserInfo(result)
-            // ...
         })
         .catch((error) => {
-            // Handle Errors here.
+            // unsuccessful sign in, handle errors
             const errorCode = error.code;
             const errorMessage = error.message;
+
             // The email of the user's account used.
             const email = error.customData.email;
+
             // The AuthCredential type that was used.
             const credential = GoogleAuthProvider.credentialFromError(error);
-            // ...
+            
+            console.log("error code: ", errorCode);
+            console.log("error message: ", errorMessage);
+            console.log("email: ", email);
+            console.log("credential: ", credential);
       });
     }
 
     
     return(
         <>
-        <div className="flex flex-col items-center justify-center gap-5">
+        {loginLoading && (<FallbackElement />)}
+        {!loginLoading && (<div className="flex flex-col items-center justify-center gap-5">
+            <img src={GleebusPeace} className="w-64 h-auto object-contain mx-auto mb-4"></img>
+            <h1 className="primary-font text-primary text-2xl">Welcome Back!</h1>
             <form onSubmit={handleSubmit}>
             <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xl border p-4">
                 <legend className="fieldset-legend">Login</legend>
@@ -132,18 +159,18 @@ function LoginPage(){
                         onChange={handleChange}
                     />
                 </label>
-                
+                {/* buttons to sign in with email and password or with google */}
                 <button type="submit" className="btn btn-primary mt-4">Login</button>
                 <p className="secondary-font mt-4 text-center"><i>OR</i></p>
                 <button type="button" className="btn bg-base-100x mt-4" onClick={handleGoogleSignIn}><FcGoogle /> Sign in with Google</button>
-                
-                
             </fieldset>
         </form>
+        {/* link to sign up page if the user doesnt have an account yet */}
         <div className="flex items-center justify-center gap-5">
-            <p className="secondary-font">New to the Gleebuslings? <a href="../signup" className="hover:text-primary text-center">Sign Up Here</a></p>
+            <p className="secondary-font">New to the Gleebuslings? <a href="../signup" className="hover:text-primary q
+            text-center">Sign Up Here</a></p>
         </div>
-        </div>
+        </div>)}
         </>
     );
 }

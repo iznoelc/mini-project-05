@@ -1,3 +1,7 @@
+/** FavoriteMovieProvider.jsx
+ * provides all the functionality to keep track of favorite movies in the website
+ */
+
 import React, { useState } from "react";
 import { FavoriteMovieContext } from "../contexts/FavoriteMovieContext";
 

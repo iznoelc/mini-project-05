@@ -117,7 +117,7 @@ export default function Dashboard(){
 
                         <div className="justify-end card-actions">
                         <button className={`text-xl transform transition-transform duration-75 hover:scale-125 hover:cursor-pointer
-                        ${isFavorite(d) ? "text-primary hover:text-error" : "hover:text-primary"}`}
+                        ${isFavorite(d) ? "text-primary hover:text-error" : "hover:text-success"}`}
                             onClick={isFavorite(d) ? () => removeFromFav(d) : () => addToFav(d)}>
                             <AiFillLike />
                         </button>

@@ -29,12 +29,11 @@ export default function Home(){
                 </div>
             </div>
         </div>
-        <div className="flex items-center justify-center gap-5">
              {slicedData.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-8xl mx-auto p-8"> 
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-8xl mx-auto p-8"> 
 
             {slicedData.map((d, index) => (
-                <div key={index} className="card w-96 bg-base-100 card-xs shadow-sm">
+                <div key={index} className="card w-full bg-base-100 card-xs shadow-sm ">
                     <div className="card-body">
                         {/* put the title and description of the movie in the cards */}
                         <h2 className="card-title primary-font text-2xl" key={index}>{d.title} ({d.releasing_year})</h2>
@@ -49,7 +48,6 @@ export default function Home(){
             ))}
             </div>
         )}  
-            </div>
             <div className="flex flex-col items-center justify-center gap-5">
                  <p className="secondary-font"><a href="/dashboard" className="btn btn-primary">See More Movies</a></p>
             </div>

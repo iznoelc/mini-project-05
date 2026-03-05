@@ -1,7 +1,8 @@
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import FallbackElement from "../components/FallbackElement";
 
-// pass children as props, which should be just the page that the user is allowed to go to if they are signed in.
+// pass children as props, which should be just the page that the user is allowed to go to if they are signed in
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();

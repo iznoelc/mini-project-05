@@ -4,7 +4,7 @@ Izzy Carlson, Landon Chapin, Esperanza Paulino
 ## LIVE LINK: https://gleebusmovies.netlify.app/
 
 ## UML
-See the uml [here](). Shows the overall structure and relationship between components, excluding outside packages like react-toastify or react-icons. Does not specify which components use useContext, useEffect, etc. Strictly drawn to show structure.
+See the uml [here](https://github.com/iznoelc/mini-project-05/blob/main/UML.png). Shows the overall structure and relationship between components, excluding outside packages like react-toastify or react-icons. Does not specify which components use useContext, useEffect, etc. Strictly drawn to show structure.
 
 ## FEATURES OF THIS PROJECT
 The same features as [mini-project-04](https://github.com/iznoelc/mini-project-04) and:
